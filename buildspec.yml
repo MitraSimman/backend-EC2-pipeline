@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - echo "Installing dependencies"
+      - yum install -y openssh-clients
+  build:
+    commands:
+      - echo "Deploying Flask app to EC2..."
+      - echo "$EC2_PRIVATE_KEY" > ec2-key.pem
+      - chmod 400 ec2-key.pem
+      - scp -o StrictHostKeyChecking=no -i ec2-key.pem app.py $SSH_USER@$EC2_IP:/home/ec2-user/
+      - ssh -o StrictHostKeyChecking=no -i ec2-key.pem $SSH_USER@$EC2_IP "nohup python3 app.py > flask.log 2>&1 &"
