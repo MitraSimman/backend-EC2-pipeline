@@ -6,7 +6,8 @@ phases:
       python: 3.8
     commands:
       - echo "Installing SSH client"
-      - yum install -y openssh-clients
+      - apt-get update
+      - apt-get install -y openssh-client
 
   pre_build:
     commands:
