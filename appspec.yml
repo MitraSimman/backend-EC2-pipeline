@@ -1,0 +1,52 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /opt/flask-app
+    overwrite: yes
+permissions:
+  - object: /opt/flask-app
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+    type:
+      - directory
+  - object: /opt/flask-app/app.py
+    owner: ec2-user
+    group: ec2-user
+    mode: 644
+  - object: /opt/flask-app/scripts
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+    type:
+      - directory
+  - object: /opt/flask-app/scripts/install_dependencies.sh
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+  - object: /opt/flask-app/scripts/start_server.sh
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+  - object: /opt/flask-app/scripts/stop_server.sh
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+hooks:
+  # BeforeInstall:
+  #   - location: scripts/stop_server.sh
+  #     timeout: 300
+  #     runas: ec2-user
+  AfterInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 600
+      runas: ec2-user
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 300
+      runas: ec2-user
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 300
+      runas: ec2-user
