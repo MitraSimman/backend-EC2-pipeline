@@ -3,6 +3,8 @@ cd /opt/flask-app
 echo "Starting Flask application..."
 # Kill any existing Flask processes
 pkill -f "python3.*app.py" || true
+# Ensure correct permissions
+chmod +x app.py
 # Start the Flask application in the background
 nohup python3 app.py > /var/log/flask-app.log 2>&1 &
 echo "Flask application started successfully"
